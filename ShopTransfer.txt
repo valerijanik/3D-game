@@ -1,0 +1,61 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class StoreTransfer : MonoBehaviour
+{
+	public Camera MainCamera;
+	public Camera ShopCamera;
+	public ShopCameraMovement shopCameraMovement;
+	public Movement movement;
+	public Canvas shopCanvas;
+	public GameObject weaponsui;
+	public GameObject questionmark;
+	public GameObject shopControl;
+	
+void Start()
+	{
+    	MainCamera.gameObject.SetActive(true);
+    	ShopCamera.gameObject.SetActive(false);
+    	weaponsui.gameObject.SetActive(true);
+    	questionmark.gameObject.SetActive(true);
+    	shopControl.gameObject.SetActive(false);
+	}
+
+private void OnTriggerStay(Collider other)
+	{
+    	if (other.gameObject.tag == "Player")
+    	{
+        	if (Input.GetKeyUp(KeyCode.E))
+        	{
+            	//Time.timeScale = 0;
+            	//SceneManager.LoadScene(3, LoadSceneMode.Additive);
+            	shopControl.gameObject.SetActive(true);
+            	ShopCameraMovement(true);
+            	PlayerMovement(false);
+            	MainCamera.gameObject.SetActive(false);
+            	ShopCamera.gameObject.SetActive(true);
+            	shopCanvas.gameObject.SetActive(true);
+            	weaponsui.gameObject.SetActive(false);
+            	questionmark.gameObject.SetActive(false);
+            	foreach (EnemyHealthManager ehm in FindObjectsOfType<EnemyHealthManager>())
+            	{
+                	ehm.GoToSleep();
+            	}
+        	}
+    	}
+	}
+	
+void ShopCameraMovement(bool active)
+	{
+    	if (shopCameraMovement != null)
+        	shopCameraMovement.enabled = active;
+	}
+	
+void PlayerMovement(bool active)
+	{
+    	if (movement != null)
+        	movement.enabled = active;
+	}
+}

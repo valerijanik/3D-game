@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ScoreManager : MonoBehaviour
+{
+	public Text scoreText;
+	int starsAmount;
+	public static int score;
+
+void Awake()
+	{
+    	starsAmount = PlayerPrefs.GetInt("StarsAmount");
+    	score = 0;
+    	
+UpdateScore();
+	}
+	
+void Update()
+	{
+    	UpdateScore();
+	}
+	
+public void AddScore(int newScoreValue)
+	{
+    	score += newScoreValue;
+    	UpdateScore();
+	}
+	
+void UpdateScore()
+	{
+    	scoreText.text = " " + score;
+	}
+
+}

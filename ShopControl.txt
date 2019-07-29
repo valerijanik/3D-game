@@ -1,0 +1,166 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class ShopControl : MonoBehaviour
+{
+	public GameObject weaponsui;
+	public GameObject questionmark;
+	public Camera MainCamera;
+	public Camera ShopCamera;
+	public Movement movement;
+	public ShopCameraMovement shopCameraMovement;
+	public Canvas shopCanvas;
+	//hammer shit
+	int isHammerSold;
+	public Text HammerPrice;
+	public Button buyHammerButton;
+	const int hammerCost = 3;
+	public Text hammerIsSold;
+	//sand bottle shit
+	int isSandSold;
+	public Text sandPrice;
+	public Button buySandButton;
+	const int sandCost = 5;
+	public Text sandIsSold;
+	//sleeping mask shit
+	int isMaskSold;
+	public Text maskPrice;
+	public Button buyMaskButton;
+	const int maskCost = 10;
+	public Text maskIsSold;
+	/*
+	//Health Upgrade shit
+	int isHealthUpgradeSold;
+	public Text healthUpgradePrice;
+	public Button buyHealthUpgradeButton;
+	const int healthUpgradeCost = 15;
+	public Text healthUpgradeIsSold;
+	*/
+	
+void Awake()
+	{
+    	hammerIsSold.gameObject.SetActive(false);
+    	sandIsSold.gameObject.SetActive(false);
+    	maskIsSold.gameObject.SetActive(false);
+    	/*healthUpgradeIsSold.gameObject.SetActive(false);*/
+    	MainCamera.gameObject.SetActive(false);
+    	ShopCamera.gameObject.SetActive(true);
+	}
+	
+	
+void Start()
+	{
+    	//hammer
+    	isHammerSold = PlayerPrefs.GetInt("IsHammerSold");
+    	if (ScoreManager.score >= hammerCost && isHammerSold == 0)
+        	buyHammerButton.interactable = true;
+    	else
+        	buyHammerButton.interactable = false;
+    	
+//sand bottle
+    	isSandSold = PlayerPrefs.GetInt("IsSandSold");
+    	if (ScoreManager.score >= sandCost && isSandSold == 0)
+        	buySandButton.interactable = true;
+    	else
+        	buySandButton.interactable = false;
+    	
+//mask
+    	isMaskSold = PlayerPrefs.GetInt("IsMaskSold");
+    	if (ScoreManager.score >= maskCost && isMaskSold == 0)
+        	buyMaskButton.interactable = true;
+    	else
+        	buyMaskButton.interactable = false;
+   	
+/*
+    	//health
+    	isHealthUpgradeSold = PlayerPrefs.GetInt("IsHealthUpgradeSold");
+    	if (ScoreManager.score >= healthUpgradeCost && isHealthUpgradeSold == 0)
+        	buyHealthUpgradeButton.interactable = true;
+    	else
+        	buyHealthUpgradeButton.interactable = false;
+    	*/
+}
+	
+public void BuyHammer()
+	{
+    	//buying hammer
+    	ScoreManager.score -= hammerCost;
+    	PlayerPrefs.SetInt("IsHammerSold", 1);
+    	buyHammerButton.gameObject.SetActive(false);
+    	hammerIsSold.gameObject.SetActive(true);
+    	
+    	//hammer attack upgrade
+    	HammerAttack.hammerDamage += 2;
+	}
+	
+public void BuySand()
+	{
+    	//buying sand bottle
+    	ScoreManager.score -= sandCost;
+    	PlayerPrefs.SetInt("IsSandSold", 1);
+    	buySandButton.gameObject.SetActive(false);
+    	sandIsSold.gameObject.SetActive(true);
+    	//sand attack upgrade
+    	SandBottle.SandBottleDamage += 1;
+	}
+	
+public void BuyMask()
+	{
+    	//buying sand bottle
+    	ScoreManager.score -= maskCost;
+    	PlayerPrefs.SetInt("IsMaskSold", 1);
+    	buyMaskButton.gameObject.SetActive(false);
+    	maskIsSold.gameObject.SetActive(true);
+    	//sand attack upgrade
+    	SleepingMask.sleepingMaskDamage += 1;
+	}
+	
+/*public void BuyHealth()
+	{
+    	//buying health upgrade
+    	ScoreManager.score -= healthUpgradeCost;
+    	PlayerPrefs.SetInt("IsHealthUpgradeSold", 1);
+    	buyHealthUpgradeButton.gameObject.SetActive(false);
+    	healthUpgradeIsSold.gameObject.SetActive(true);
+    	//health upgrade
+    	PlayerPrefs.SetInt("PlayerMaxHealth", PlayerPrefs.GetInt("PlayerMaxHealth") + 1);
+	}*/
+	
+public void ExitShop()
+	{
+    	//SceneManager.UnloadSceneAsync("ShopScene");
+    	MainCamera.gameObject.SetActive(true);
+    	ShopCamera.gameObject.SetActive(false);
+    	ShopCameraMovement(false);
+    	PlayerMovement(true);
+    	shopCanvas.gameObject.SetActive(false);
+    	weaponsui.gameObject.SetActive(true);
+    	questionmark.gameObject.SetActive(true);
+    	//Time.timeScale = 1;
+    	foreach (EnemyHealthManager ehm in FindObjectsOfType<EnemyHealthManager>())
+    	{
+        	ehm.AwakeFromSleep();
+    	}
+	}
+	
+void ShopCameraMovement(bool active)
+	{
+    	if (shopCameraMovement != null)
+        	shopCameraMovement.enabled = active;
+	}
+	void PlayerMovement(bool active)
+	{
+    	if (movement != null)
+        	movement.enabled = active;
+	}
+	
+//public void ResetPlayerPrefs()
+	//{
+	//	buyHammerButton.gameObject.SetActive(true);
+	//	buySandButton.gameObject.SetActive(true);
+	//	buyMaskButton.gameObject.SetActive(true);
+	//}
+}

@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DestroyParent : MonoBehaviour
+{
+	public int scoreValue = 1;
+	public ScoreManager scoreManager;
+
+void Start()
+	{
+    	scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+	}
+
+void OnTriggerEnter(Collider other)
+	{
+    		if (other.CompareTag("Player"))
+    	{
+        	scoreManager.AddScore(scoreValue);
+        	Destroy(gameObject);
+    	}
+	}
+}

@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerFollow : MonoBehaviour
+{
+	public Transform PlayerTransform;
+	public Transform cameraTransform;
+	private Vector3 _cameraOffset;
+	[Range(0.01f, 1.0f)]
+	public float SmoothFactor = 0.4f;
+	public bool LookAtPlayer = false;
+	public bool RotateAroundPlayer = true;
+	public float RotationSpeed = 500f;
+	private Vector3 camTurnAngle;
+	float rightMouseButtonClickStartPosition;
+	public float randomNumber;
+
+	//for camera following cursor
+	public float speedH = 2.0f;
+	public float speedV = 2.0f;
+	private float yaw = 0.0f;
+	private float pitch = 0.0f;
+
+void Start()
+	{
+    	_cameraOffset = transform.position - PlayerTransform.position;
+    	cameraTransform =    GameObject.FindGameObjectWithTag("MainCamera").transform;
+	}
+
+	//camera following cursor
+void Update()
+	{
+    	yaw += speedH * Input.GetAxis("Mouse X");
+    	pitch = speedV * Input.GetAxis("Mouse Y");
+    	transform.Rotate(-pitch, PlayerTransform.localRotation.z, 0 );
+    	transform.position = PlayerTransform.position;
+    	//PlayerTransform.Rotate(PlayerTransform.rotation.x, transform.rotation.z, PlayerTransform.rotation.y);
+	}
+
+	/*void LateUpdate()
+	{
+    	if(RotateAroundPlayer)
+    	
+{
+        	//Quaternion camTurnAngle = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * RotationSpeed, Vector3.up);
+        	if (Input.GetMouseButtonDown(1))
+            	rightMouseButtonClickStartPosition = Input.mousePosition.x;
+        	if (Input.GetMouseButton(1))
+        	
+{
+            PlayerTransform.RotateAround(PlayerTransform.position, Vector3.up, Mathf.Clamp((Input.mousePosition.x - rightMouseButtonClickStartPosition)/ Screen.width * RotationSpeed * Time.deltaTime, -10f, 10f));
+        	}
+    	}
+
+    	Vector3 newPos = PlayerTransform.position;
+    	transform.position = Vector3.Slerp(transform.position, newPos, SmoothFactor);
+    	//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, PlayerTransform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z), SmoothFactor);
+ 	
+    	//cameraTransform.LookAt(PlayerTransform.position + Vector3.up * randomNumber);
+   	
+
+    	// Reset Camera Position
+    	if (Input.GetKeyUp(KeyCode.C))
+    	{
+        	Camera.main.fieldOfView = 50;
+        	Camera.main.orthographicSize =5;
+        	//transform.eulerAngles.y = 90;
+    	}
+	}*/
+
+}

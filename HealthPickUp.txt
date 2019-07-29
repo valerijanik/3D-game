@@ -1,0 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HeartPickUp : MonoBehaviour
+{
+	PlayerHealthManager playerHealthMan;
+	public int addHP = 2;
+	// Start is called before the first frame update
+	
+void Awake()
+	{
+    	playerHealthMan = FindObjectOfType<PlayerHealthManager>();
+	}
+		
+void OnTriggerEnter(Collider other)
+	{
+    	if (other.CompareTag("Player"))
+    	
+{
+        	playerHealthMan.Heal(addHP);
+        	Destroy(gameObject);
+    	}
+        	
+	}
+}

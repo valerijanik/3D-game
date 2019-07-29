@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System;
+
+public class ProgressSceneLoader : MonoBehaviour
+{
+	[SerializeField]
+	private Slider slider;
+	private AsyncOperation operation;
+	public Canvas canvas;
+	
+private void Awake()
+	{
+    	if (canvas == null )canvas = GetComponentInChildren<Canvas>(true);
+    	//DontDestroyOnLoad(gameObject);
+	}
+	
+public void LoadScene(string sceneName)
+	{
+    	UpdateProgressUI(0);
+    	canvas.gameObject.SetActive(true);
+    	StartCoroutine(BeginLoad(sceneName));
+	}
+	
+internal void LoadScene(object sceneName)
+	{
+    	throw new NotImplementedException();
+	}
+	
+private IEnumerator BeginLoad(string sceneName)
+	{
+    	operation = SceneManager.LoadSceneAsync(sceneName);
+    	operation.allowSceneActivation = false;
+    	float timer = 0;
+    	
+while (!operation.isDone && timer < 2f)
+    	{
+        	timer += Time.deltaTime;
+        	UpdateProgressUI(operation.progress);
+        	yield return null;
+        	//gameObject.SetActive(false);
+    	}
+
+    	operation.allowSceneActivation = true;
+	}
+	
+private void UpdateProgressUI(float progress)
+	{
+    	slider.value = progress;
+	}
+}
