@@ -1,0 +1,98 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyController : MonoBehaviour
+{
+    public float moveSpeed;
+
+    private Rigidbody myRigidbody;
+
+    private bool moving;
+    public float timeBetweenMove;
+    private float timeBetweenMoveCounter;
+    public float timeToMove;
+    private float timeToMoveCounter;
+    public float movingDistance;
+    Vector3 startPosition;
+    public Vector3 moveDirection;
+    Territory territory;
+
+    public Animator animator;
+
+    public float waitToReload;
+    private bool reloading;
+    private GameObject thePlayer;
+
+    int xSign = 1, zSign = 1;
+
+    // Use this for initialization
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+
+        territory = GetComponent<Territory>();
+        myRigidbody = GetComponent<Rigidbody>();
+        startPosition = myRigidbody.position;
+        //timeBetweenMoveCounter = timeBetweenMove;
+        //timeToMoveCounter = timeToMove;
+
+        timeBetweenMoveCounter = Random.Range(timeBetweenMove * 0.75f, timeBetweenMove * 1.25f);
+        timeToMoveCounter = Random.Range(timeToMove * 0.75f, timeBetweenMove * 1.25f);
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (territory.moveAll == true)
+        {
+            if (myRigidbody.position.x < startPosition.x - movingDistance || myRigidbody.position.x > startPosition.x + movingDistance)
+            {
+                xSign *= -1;
+            }
+
+            if (myRigidbody.position.z < startPosition.z - movingDistance || myRigidbody.position.z > startPosition.z + movingDistance)
+            {
+                zSign *= -1;
+            }
+
+            if (moving)
+            {
+                timeToMoveCounter -= Time.deltaTime;
+                myRigidbody.velocity = moveDirection;
+
+                if (timeToMoveCounter < 0f)
+                {
+                    moving = false;
+                    //timeBetweenMoveCounter = timeBetweenMove;
+                    timeBetweenMoveCounter = Random.Range(timeBetweenMove * 0.75f, timeBetweenMove * 1.25f);
+                }
+
+            }
+            else
+            {
+                timeBetweenMoveCounter -= Time.deltaTime;
+                myRigidbody.velocity = Vector2.zero;
+
+                if (timeBetweenMoveCounter < 0f)
+                {
+                    moving = true;
+                    //timeToMoveCounter = timeToMove;
+                    timeToMoveCounter = Random.Range(timeToMove * 0.75f, timeBetweenMove * 1.25f);
+
+                    moveDirection = new Vector3(Random.Range(0, 1f) * moveSpeed * xSign, 0f, Random.Range(0, 1f) * moveSpeed * zSign);
+                }
+            }
+
+            if (reloading)
+            {
+                waitToReload -= Time.deltaTime;
+                if (waitToReload < 0)
+                {
+                    Application.LoadLevel(Application.loadedLevel);
+                    thePlayer.SetActive(true);
+                }
+            }
+        }
+    }
+}
