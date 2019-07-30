@@ -13,24 +13,28 @@ public class ShopControl : MonoBehaviour
 	public Movement movement;
 	public ShopCameraMovement shopCameraMovement;
 	public Canvas shopCanvas;
+	
 	//hammer shit
 	int isHammerSold;
 	public Text HammerPrice;
 	public Button buyHammerButton;
 	const int hammerCost = 3;
 	public Text hammerIsSold;
+	
 	//sand bottle shit
 	int isSandSold;
 	public Text sandPrice;
 	public Button buySandButton;
 	const int sandCost = 5;
 	public Text sandIsSold;
+	
 	//sleeping mask shit
 	int isMaskSold;
 	public Text maskPrice;
 	public Button buyMaskButton;
 	const int maskCost = 10;
 	public Text maskIsSold;
+	
 	/*
 	//Health Upgrade shit
 	int isHealthUpgradeSold;
@@ -60,21 +64,21 @@ void Start()
     	else
         	buyHammerButton.interactable = false;
     	
-//sand bottle
+	//sand bottle
     	isSandSold = PlayerPrefs.GetInt("IsSandSold");
     	if (ScoreManager.score >= sandCost && isSandSold == 0)
         	buySandButton.interactable = true;
     	else
         	buySandButton.interactable = false;
     	
-//mask
+	//mask
     	isMaskSold = PlayerPrefs.GetInt("IsMaskSold");
     	if (ScoreManager.score >= maskCost && isMaskSold == 0)
         	buyMaskButton.interactable = true;
     	else
         	buyMaskButton.interactable = false;
    	
-/*
+	/*
     	//health
     	isHealthUpgradeSold = PlayerPrefs.GetInt("IsHealthUpgradeSold");
     	if (ScoreManager.score >= healthUpgradeCost && isHealthUpgradeSold == 0)
@@ -141,20 +145,21 @@ public void ExitShop()
     	questionmark.gameObject.SetActive(true);
     	//Time.timeScale = 1;
     	foreach (EnemyHealthManager ehm in FindObjectsOfType<EnemyHealthManager>())
-    	{
+    		{
         	ehm.AwakeFromSleep();
-    	}
+    		}
 	}
 	
 void ShopCameraMovement(bool active)
 	{
     	if (shopCameraMovement != null)
-        	shopCameraMovement.enabled = active;
+        shopCameraMovement.enabled = active;
 	}
-	void PlayerMovement(bool active)
+
+void PlayerMovement(bool active)
 	{
     	if (movement != null)
-        	movement.enabled = active;
+        movement.enabled = active;
 	}
 	
 //public void ResetPlayerPrefs()
