@@ -6,7 +6,6 @@ public class HeartPickUp : MonoBehaviour
 {
 	PlayerHealthManager playerHealthMan;
 	public int addHP = 2;
-	// Start is called before the first frame update
 	
 void Awake()
 	{
@@ -15,12 +14,12 @@ void Awake()
 		
 void OnTriggerEnter(Collider other)
 	{
-    	if (other.CompareTag("Player"))
     	
-{
+	if (other.CompareTag("Player"))
+    		{
         	playerHealthMan.Heal(addHP);
-        	Destroy(gameObject);
-    	}
+       		Destroy(gameObject);
+    		}
         	
 	}
 }
