@@ -8,10 +8,6 @@ public class Follow : MonoBehaviour
 	Vector3 _velocity = Vector3.zero;
 	public float smoothTime = 0.3f;
 	
-private void Start()
-	{
-	}
-	
 void Update()
 	{
     	//Target = GameObject.FindGameObjectWithTag("DropLootTracker").transform;
