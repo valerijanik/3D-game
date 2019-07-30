@@ -8,8 +8,6 @@ public class PlayerHealthManager : MonoBehaviour
 	public int playerMaxHealth;
 	public int playerCurrentHealth;
 	public Hearts HeartsScript;
-	//public Image healthBar;
-	//public Text scoreText;
 	Movement movement;
 	public AudioSource death;
 	public AudioSource hurt;
@@ -29,14 +27,14 @@ void Start()
 private void OnLevelWasLoaded(int level)
 	{
     	if (level == SceneManager.GetSceneByName("SampleScene").buildIndex)
-    	{
+    		{
         	playerCurrentHealth = PlayerPrefs.GetInt("PlayerMaxHealth", playerMaxHealth);
         	HeartsScript.SetHearts(playerCurrentHealth);
-    	}
+    		}
     	else
-    	{
+    		{
         	SetMaxHealth();
-    	}
+    		}
 	}
 	
 private void OnDisable()
@@ -49,20 +47,20 @@ bool isDead;
 void Update()
 	{
     	if (playerCurrentHealth <= 0 && !isDead)
-    	{
+    		{
         	animator.SetBool("Dead", true);
         	movement.Death();
         	isDead = true;
         	death.Play(1);
-    	}
+    		}
 	}
 
 public bool IsDead
 	{
     	get
-    	{
+    		{
         	return playerCurrentHealth <= 0;
-    	}
+    		}
 	}
 
 public void TakeDamage(int amount)
@@ -86,9 +84,10 @@ public void Heal(int amount)
     	HeartsScript.SetHearts(playerCurrentHealth);
 	}
 
-	public void PowerHeal(int amount){
-    	playerMaxHealth += amount;
-	}
+	public void PowerHeal(int amount)
+		{
+    		playerMaxHealth += amount;
+		}
 	
 void ReloadLevel()
 	{
