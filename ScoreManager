@@ -14,7 +14,7 @@ void Awake()
     	starsAmount = PlayerPrefs.GetInt("StarsAmount");
     	score = 0;
     	
-UpdateScore();
+	UpdateScore();
 	}
 	
 void Update()
