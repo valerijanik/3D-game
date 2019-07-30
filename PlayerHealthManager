@@ -3,95 +3,94 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 public class PlayerHealthManager : MonoBehaviour
 {
-	public int playerMaxHealth;
-	public int playerCurrentHealth;
-	public Hearts HeartsScript;
-	Movement movement;
-	public AudioSource death;
-	public AudioSource hurt;
-	public Animator animator;
 
-private void Awake()
-	{
-    	playerCurrentHealth = playerMaxHealth;
-    	animator = GetComponent<Animator>();
-	}
+    public int playerMaxHealth;
+    public int playerCurrentHealth;
+    public Hearts HeartsScript;
+    Movement movement;
+    public AudioSource death;
+    public AudioSource hurt;
+    public Animator animator;
 
-void Start()
-	{
-    	movement = GetComponent<Movement>();
-	}
+    private void Awake()
+    {
+        playerCurrentHealth = playerMaxHealth;
+        animator = GetComponent<Animator>();
+    }
 
-private void OnLevelWasLoaded(int level)
-	{
-    	if (level == SceneManager.GetSceneByName("SampleScene").buildIndex)
-    		{
-        	playerCurrentHealth = PlayerPrefs.GetInt("PlayerMaxHealth", playerMaxHealth);
-        	HeartsScript.SetHearts(playerCurrentHealth);
-    		}
-    	else
-    		{
-        	SetMaxHealth();
-    		}
-	}
-	
-private void OnDisable()
-	{
-    	PlayerPrefs.SetInt("CurrentHealth", playerCurrentHealth);
-	}
-	
-bool isDead;
-	
-void Update()
-	{
-    	if (playerCurrentHealth <= 0 && !isDead)
-    		{
-        	animator.SetBool("Dead", true);
-        	movement.Death();
-        	isDead = true;
-        	death.Play(1);
-    		}
-	}
+    void Start()
+    {
+        movement = GetComponent<Movement>();
+    }
 
-public bool IsDead
-	{
-    	get
-    		{
-        	return playerCurrentHealth <= 0;
-    		}
-	}
+    private void OnLevelWasLoaded(int level)
+    {
+        if (level == SceneManager.GetSceneByName("SampleScene").buildIndex)
+        {
+            playerCurrentHealth = PlayerPrefs.GetInt("PlayerMaxHealth", playerMaxHealth);
+            HeartsScript.SetHearts(playerCurrentHealth);
+        }
+        else
+        {
+            SetMaxHealth();
+        }
+    }
 
-public void TakeDamage(int amount)
-	{
-    	playerCurrentHealth -= amount;
-    	animator.SetTrigger("TakeDamage");
-    	HeartsScript.SetHearts(playerCurrentHealth);
-    	hurt.Play(1);
-	}
+    private void OnDisable()
+    {
+        PlayerPrefs.SetInt("CurrentHealth", playerCurrentHealth);
+    }
 
-public void SetMaxHealth()
-	{
-    	playerCurrentHealth = playerMaxHealth;
-    	HeartsScript.SetHearts(playerCurrentHealth);
-	}
-	
-public void Heal(int amount)
-	{
-    	playerCurrentHealth += amount;
-    	playerCurrentHealth = System.Math.Min(playerMaxHealth, playerCurrentHealth);
-    	HeartsScript.SetHearts(playerCurrentHealth);
-	}
+    bool isDead;
 
-	public void PowerHeal(int amount)
-		{
-    		playerMaxHealth += amount;
-		}
-	
-void ReloadLevel()
-	{
-    	Application.LoadLevel("SampleScene");
-	}
+    void Update()
+    {
+        if (playerCurrentHealth <= 0 && !isDead)
+        {
+            animator.SetBool("Dead", true);
+            movement.Death();
+            isDead = true;
+            death.Play(1);
+        }
+    }
 
+    public bool IsDead
+    {
+        get
+        {
+            return playerCurrentHealth <= 0;
+        }
+    }
+
+    public void TakeDamage(int amount)
+    {
+        playerCurrentHealth -= amount;
+        animator.SetTrigger("TakeDamage");
+        HeartsScript.SetHearts(playerCurrentHealth);
+        hurt.Play(1);
+    }
+
+    public void SetMaxHealth()
+    {
+        playerCurrentHealth = playerMaxHealth;
+        HeartsScript.SetHearts(playerCurrentHealth);
+    }
+
+    public void Heal(int amount)
+    {
+        playerCurrentHealth += amount;
+        playerCurrentHealth = System.Math.Min(playerMaxHealth, playerCurrentHealth);
+        HeartsScript.SetHearts(playerCurrentHealth);
+    }
+    public void PowerHeal(int amount){
+        playerMaxHealth += amount;
+    }
+
+    void ReloadLevel()
+    {
+        Application.LoadLevel("SampleScene");
+    }
 }
