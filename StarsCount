@@ -15,9 +15,9 @@ void Start()
 void OnTriggerEnter(Collider other)
 	{
     		if (other.CompareTag("Player"))
-    	{
+    		{
         	scoreManager.AddScore(scoreValue);
         	Destroy(gameObject);
-    	}
+    		}
 	}
 }
