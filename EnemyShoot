@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class shooot : MonoBehaviour
+{
+    public Transform player;
+    public float range;
+    public float bulletImpulse = 20.0f;
+    public GameObject enemy;
+  
+
+    public bool onRange = false;
+
+    public Rigidbody projectile;
+
+    public Animator bossAnimator;
+    public Animator rangeEnemyAnimator;
+
+    void Start()
+    {
+        float rand = Random.Range(1.0f, 2.0f);
+        InvokeRepeating("Shoot", 2, rand);
+
+        bossAnimator = GetComponent<Animator>();
+        rangeEnemyAnimator = GetComponent<Animator>();
+    
+    }
+
+    void Shoot()
+    {
+
+        if (onRange)
+        {
+            Rigidbody bullet = (Rigidbody)Instantiate(projectile, transform.position + transform.forward, transform.rotation);
+            bullet.AddForce(transform.forward * bulletImpulse, ForceMode.Impulse);
+
+            bossAnimator.SetTrigger("RangeAttack");
+            rangeEnemyAnimator.SetTrigger("RangeEnemyAttack");
+            
+            Destroy(bullet.gameObject, 2);
+        }
+    }
+
+    void Update()
+    {
+        onRange = Vector3.Distance(transform.position, player.position) < range;
+
+        if (onRange)
+        transform.LookAt(player);
+    }
+
+}
