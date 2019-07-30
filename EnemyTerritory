@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Territory : MonoBehaviour
+{
+    public BoxCollider territory;
+    GameObject player;
+    public bool playerInTerritory;
+    public bool moveAll;
+
+    public GameObject enemy;
+    BasicEnemy basicenemy;
+
+    // Use this for initialization
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        basicenemy = enemy.GetComponent<BasicEnemy>();
+        playerInTerritory = false;
+    }
+
+    // Update is called once per frame
+    public void Update()
+    {
+        if (playerInTerritory == true)
+        {
+            moveAll = false;
+            basicenemy.MoveToPlayer();
+        }
+
+        if (playerInTerritory == false)
+        {
+            moveAll = true;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (playerInTerritory == false && other.gameObject == player && player.GetComponent<Movement>().sniek == false)
+            playerInTerritory = true;
+    }
+}
