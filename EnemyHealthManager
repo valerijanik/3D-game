@@ -1,0 +1,130 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EnemyHealthManager : MonoBehaviour
+{
+    public int enemyMaxHealth;
+    public int enemyCurrentHealth;
+   
+    public ScoreManager scoreManager;
+    public Image healthBar;
+    public Territory territory;
+    public GameObject LootStarsPrefab;
+    public GameObject LootHeartsPrefab;
+    public GameObject LootPowerprefab;
+    [SerializeField] public GameObject healbar;
+    GameObject _DropLootTarget;
+    public ParticleSystem death;
+    Transform cameraTransform;
+    public Transform canvas;
+    public float nextPla;
+    public AudioSource hit;
+
+    public Animator animator;
+
+    EnemyController enemyController;
+    HurtPlayer hurtPlayer;
+    BasicEnemy basicEnemy;
+    shoot2 shoot2;
+    shooot shooot;
+
+    void Start()
+    {
+        healbar.SetActive(false);
+        territory = GetComponent<Territory>();
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        enemyCurrentHealth = enemyMaxHealth;
+        _DropLootTarget = GameObject.FindGameObjectWithTag("DropLootTracker");
+        cameraTransform = Camera.main.transform;
+
+        enemyController = GetComponent<EnemyController>();
+        hurtPlayer = GetComponent<HurtPlayer>();
+        basicEnemy = GetComponent<BasicEnemy>();
+        shooot = GetComponent<shooot>();
+        shoot2 = GetComponent<shoot2>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        canvas.transform.LookAt(cameraTransform);
+        if (enemyCurrentHealth <= 0)
+        {
+            if (Time.time > nextPla)
+            {
+                Instantiate(death);
+            }
+            for (int i = 0; i<3; i++)
+            {
+                var go = Instantiate(LootStarsPrefab, transform.position + new Vector3(0, Random.Range(0, 2)), Quaternion.identity);
+
+                go.GetComponent<Follow>().Target = _DropLootTarget.transform;
+            }
+            
+            for (int i = 0; i < 3; i++)
+            {
+                var go = Instantiate(LootHeartsPrefab, transform.position + new Vector3(0, Random.Range(0, 2)), Quaternion.identity);
+
+                go.GetComponent<Follow>().Target = _DropLootTarget.transform;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                var go = Instantiate(LootPowerprefab, transform.position + new Vector3(0, Random.Range(0, 2)), Quaternion.identity);
+
+                go.GetComponent<Follow>().Target = _DropLootTarget.transform;
+            }
+            Destroy(gameObject);
+        }
+        if(territory.playerInTerritory == true)
+        {
+            healbar.SetActive(true);
+        }
+    }
+
+    public void GoToSleep(int duration = 0)
+    {
+        ActivateScripts(false);
+        if (duration > 0)
+            Invoke("AwakeFromSleep", duration);
+    }
+
+    public void AwakeFromSleep()
+    {
+        ActivateScripts(true);
+    }
+
+    void ActivateScripts(bool active)
+    {
+        if (enemyController != null)
+            enemyController.enabled = active;
+        if (hurtPlayer != null)
+            hurtPlayer.enabled = active;
+        if (basicEnemy != null)
+            basicEnemy.enabled = active;
+        if (shooot != null)
+            shooot.enabled = active;
+        if (shoot2 != null)
+            shoot2.enabled = active;
+        if (territory != null)
+            territory.enabled = active;
+    }
+
+
+    public void HurtEnemy(int damageToGive)
+    {
+        enemyCurrentHealth -= damageToGive;
+        hit.Play();
+        if (Time.time > nextPla)
+        {
+
+        }
+        healthBar.fillAmount = (float)enemyCurrentHealth / enemyMaxHealth;
+    }
+
+    public void SetMaxHealth()
+    {
+        enemyCurrentHealth = enemyMaxHealth;
+    }
+}
