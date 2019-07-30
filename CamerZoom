@@ -12,7 +12,7 @@ public class Zoom : MonoBehaviour
 	private float currentFOV;
 		
 void Start()
-	{
+	{ 
     	cam = GetComponent<Camera>();
     	startingFOV = cam.fieldOfView;
 	}
