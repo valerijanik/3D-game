@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HurtPlayer : MonoBehaviour
+{
+    public float timeBetweenAttacks = 0.5f;     // The time in seconds between each attack.
+    public int attackDamage = 1;
+
+    public float attackRange;
+    public Transform enemyMesh;
+
+    GameObject player;                          // Reference to the player GameObject.
+    PlayerHealthManager playerHealth;
+    EnemyHealthManager enemyHealth;                       // Whether player is within the trigger collider and can be attacked.
+    float timer;
+
+    public Animator meleeEnemyAnimator;
+
+    void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealthManager>();
+        enemyHealth = GetComponent<EnemyHealthManager>();
+        meleeEnemyAnimator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        // Add the time since Update was last called to the timer.
+        timer += Time.deltaTime;
+
+        // If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
+        if (timer >= timeBetweenAttacks && Vector3.Distance(enemyMesh.transform.position, player.transform.position) < attackRange && enemyHealth.enemyCurrentHealth > 0)
+        {
+            // ... attack.
+            Attack();
+        }       
+    }
+
+    void Attack()
+    {
+        // Reset the timer.
+        timer = 0f;
+
+        // If the player has health to lose...
+        if (playerHealth.playerCurrentHealth > 0)
+        {
+            // ... damage the player.
+            playerHealth.TakeDamage(attackDamage);
+            meleeEnemyAnimator.SetTrigger("MeleeEnemyAttack");
+        }
+    }
+}
