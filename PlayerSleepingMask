@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SleepingMask : MonoBehaviour
+{
+    public float timeDelay = 2f;
+    float startTimer;
+
+    public static int sleepingMaskDamage = 1;
+    public float explosiveForce = 20f;
+    public float explosiveRadius = 15f;
+
+    public LayerMask EnemyLayer;
+
+    void Update()
+    {
+        startTimer += Time.deltaTime;
+        if (startTimer >= timeDelay)
+        {
+            Explode();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Explode();
+    }
+
+    /*IEnumerator*/ void Explode()
+    {
+        Collider[] coll = Physics.OverlapSphere(transform.position, explosiveRadius, EnemyLayer);
+
+        for (int i = 0; i < coll.Length; i++)
+        {
+            EnemyHealthManager enemyHealthManager = coll[i].gameObject.GetComponent<EnemyHealthManager>();
+            if (enemyHealthManager != null)
+            {
+                enemyHealthManager.HurtEnemy(sleepingMaskDamage);
+                enemyHealthManager.GoToSleep(2);
+                coll[i].gameObject.GetComponent<Rigidbody>().AddExplosionForce(explosiveForce, transform.position, explosiveRadius);
+                //coll[i].GetComponent<Animator>().SetTrigger("GettingBlinded");
+            }
+        }
+        
+        Destroy(gameObject);
+    }
+}
