@@ -11,20 +11,16 @@ void Start()
 	{
     	dMan = FindObjectOfType<DialogueManagerEnd>();
 	}
-		
-void Update()
-	{
-	}
 	
 private void OnTriggerStay(Collider other)
 	{
     	if (other.gameObject.tag == "Player")
     	
-{
+		{
         	if (Input.GetKeyUp(KeyCode.R))
-        	{
-            	dMan.ShowBox(dialogue);
-        	}
-    	}
+        		{
+            		dMan.ShowBox(dialogue);
+        		}
+    		}
 	}
 }
