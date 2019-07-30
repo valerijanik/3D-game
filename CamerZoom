@@ -22,9 +22,9 @@ void Update()
     	currentFOV = cam.fieldOfView;
     	
     	if (Input.GetKeyDown(KeyCode.P))
-    	{
+    		{
         	currentFOV = startingFOV;
-    	}
+    		}
 
     	UseWheel();
 	}
