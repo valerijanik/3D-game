@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-//using System.Diagnostics.Contracts;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -9,7 +8,7 @@ public class Movement : MonoBehaviour
 	public float sneakSpeed;
 	public Rigidbody rb;
 	public Jump2 jumb;
-	public bool sniek;
+	public bool sneak;
 	public float cameraSentivity;
 	public bool gamePaused;
 	[SerializeField] public GameObject pausePanel;
@@ -31,7 +30,7 @@ public class Movement : MonoBehaviour
 	public float verticalSpeed = 2.0F;
 	public bool ismoving;
 
-	void Start()
+void Start()
 	{
     	tutorialaon = false;
     	gamePaused = false;
@@ -42,7 +41,7 @@ public class Movement : MonoBehaviour
     	animator = GetComponent<Animator>();
 	}
 
-	void Update()
+void Update()
 	{
     	//rotation after mouse
     	float mouseInput = Input.GetAxis("Mouse X");
@@ -51,26 +50,28 @@ public class Movement : MonoBehaviour
     	isbrounded = jumb.onGround;
 
     	if (exp == 10)
-    	{
+    		{
         	exp = 0;
         	level =+ 1;
-    	}
-    	sniek |= Input.GetKeyDown(KeyCode.LeftShift);
+    		}
+		
+    	sneak |= Input.GetKeyDown(KeyCode.LeftShift);
     	//sneaking animation
-    	sniek &= !Input.GetKeyUp(KeyCode.LeftShift);
+    	sneak &= !Input.GetKeyUp(KeyCode.LeftShift);
     	if (Input.GetKeyDown(KeyCode.Escape))
     	{
         	if (!pausePanel.activeInHierarchy)
-        	{
-            	PauseGame();
-        	}
+        		{
+            		PauseGame();
+        		}
         	else
-        	if (pausePanel.activeInHierarchy){
-            	ContinueGame();
-        	}
+        		if (pausePanel.activeInHierarchy)
+			{
+            		ContinueGame();
+        		}
     	}
 
-    	transform.Translate(0f, 0f, Input.GetAxis("Vertical") * Time.deltaTime * (sniek ? sneakSpeed : speed));
+    	transform.Translate(0f, 0f, Input.GetAxis("Vertical") * Time.deltaTime * (sneak ? sneakSpeed : speed));
     	transform.Rotate(0, Input.GetAxis("Mouse X") * cameraSentivity, 0);
     	move = Input.GetAxis("Vertical");
     	
@@ -88,42 +89,40 @@ if (isbrounded == true && ismoving == true && Time.time > nextPlay)
     	}
 
     	if (Input.GetKeyDown(KeyCode.C))
-    	{
+    		{
         	Tutorial();
-    	}
+    		}
 	}
 
-	public void PauseGame()
+public void PauseGame()
 	{
     	Time.timeScale = 0;
     	pausePanel.SetActive(true);
-    	//Disable scripts that still work while timescale is set to 0
 	}
 
-	public void ContinueGame()
+public void ContinueGame()
 	{
     	Time.timeScale = 1;
     	pausePanel.SetActive(false);
     	settings.SetActive(false);
-    	//enable the scripts again
 	}
 
-	public void OpenSettings(){
+public void OpenSettings(){
     	settings.SetActive(true);
 	}
 
-	public void CloseSettings()
+public void CloseSettings()
 	{
     	settings.SetActive(false);
 	}
 
-	public void Death()
+public void Death()
 	{
     	Time.timeScale = 0;
     	death.SetActive(true);
 	}
 
-	public void Tutorial()
+public void Tutorial()
 	{
     	tutorial.SetActive(!tutorial.activeInHierarchy);
 	}
