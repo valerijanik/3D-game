@@ -1,0 +1,64 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HammerAttack : MonoBehaviour {
+
+    public float attackDuration;
+    public static int hammerDamage = 2;
+    public float radius;
+
+    bool attackInProgress;
+
+    public Animator animator;
+    public AudioSource hit;
+
+    public ParticleSystem starHit;
+
+    bool hammer;
+    ShowWeapon showWeapon;
+    GameObject player;
+
+    void Start ()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        showWeapon = player.GetComponent<ShowWeapon>();
+	}
+	
+	void Update ()
+    {
+        hammer = showWeapon.showItem1;
+        if (hammer == true)
+        {
+            if (Input.GetMouseButtonDown(0) && !attackInProgress)
+            {
+                StartCoroutine(Attack());
+                animator.SetTrigger("MeleeAttack");
+                hit.volume = Random.Range(0.8f, 1);
+                hit.pitch = Random.Range(0.8f, 1.1f);
+                hit.Play(1);
+                Instantiate(starHit);
+            }
+        }
+	} 
+
+    IEnumerator Attack()
+    {
+        attackInProgress = true;
+
+        yield return new WaitForSeconds(attackDuration);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+
+        foreach (Collider coll in colliders)
+        {
+            if (coll.tag.Equals("enemy"))
+            {
+                //enemy takes damage
+                coll.GetComponent<EnemyHealthManager>().HurtEnemy(hammerDamage);
+            }
+        }
+
+        attackInProgress = false;
+    }
+}
