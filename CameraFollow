@@ -28,7 +28,6 @@ void Start()
     	cameraTransform =    GameObject.FindGameObjectWithTag("MainCamera").transform;
 	}
 
-	//camera following cursor
 void Update()
 	{
     	yaw += speedH * Input.GetAxis("Mouse X");
@@ -37,36 +36,4 @@ void Update()
     	transform.position = PlayerTransform.position;
     	//PlayerTransform.Rotate(PlayerTransform.rotation.x, transform.rotation.z, PlayerTransform.rotation.y);
 	}
-
-	/*void LateUpdate()
-	{
-    	if(RotateAroundPlayer)
-    	
-{
-        	//Quaternion camTurnAngle = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * RotationSpeed, Vector3.up);
-        	if (Input.GetMouseButtonDown(1))
-            	rightMouseButtonClickStartPosition = Input.mousePosition.x;
-        	if (Input.GetMouseButton(1))
-        	
-{
-            PlayerTransform.RotateAround(PlayerTransform.position, Vector3.up, Mathf.Clamp((Input.mousePosition.x - rightMouseButtonClickStartPosition)/ Screen.width * RotationSpeed * Time.deltaTime, -10f, 10f));
-        	}
-    	}
-
-    	Vector3 newPos = PlayerTransform.position;
-    	transform.position = Vector3.Slerp(transform.position, newPos, SmoothFactor);
-    	//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, PlayerTransform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z), SmoothFactor);
- 	
-    	//cameraTransform.LookAt(PlayerTransform.position + Vector3.up * randomNumber);
-   	
-
-    	// Reset Camera Position
-    	if (Input.GetKeyUp(KeyCode.C))
-    	{
-        	Camera.main.fieldOfView = 50;
-        	Camera.main.orthographicSize =5;
-        	//transform.eulerAngles.y = 90;
-    	}
-	}*/
-
 }
